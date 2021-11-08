@@ -1,0 +1,152 @@
+{% load static %}
+{% static "images" as baseUrl %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Contact</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Travello template project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+<link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/contact.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/contact_responsive.css' %}">
+</head>
+<body>
+<div class="super_container">
+	
+	<!-- Header -->
+
+
+	<header>
+		<div class="background_image" style="background-image:url({% static 'images/footwearbackground.jpg' %})"></div>
+		<div class="container">
+			<div class="row">
+				<div class="row">
+				<div class="logo"><a href=" "><h1>SENTRO MANILA</h1></a></div>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				
+				<div>
+					<br><form action="#" class="home_search_form" id="home_search_form">
+						<div class="d-flex flex-lg-row flex-column justify-content-start">
+							<input type="text" class="search_input" placeholder="Search an Item" required="required" size="80">&nbsp; &nbsp;
+							<button class="home_search_button">search</button>
+						</div>
+					</form>
+				</div>
+				</div>
+			</div>
+	</header>
+
+	<!-- Order -->
+	<div class="contact">
+		<div class="container">
+			<div class="row">
+				<!-- Get in touch -->
+				<div class="col-lg-6">
+					<div class="contact_content">
+						<div class="contact_title"><h2>Make an Order for:</h2></div>
+						<div class="destination_image"><img src="{% static 'images/shoe.jpg' %}" alt="Shoe error">
+						</div>
+					</div>
+				</div>
+
+				<!-- Contact Form -->
+				<div class="col-lg-6" ><br>
+					<div class="contact_form_container">
+						<span style="color:#000000;"><h2>Shoe #1</h2></span>
+						<span style="color:#000000;"><h3>P 500</h3></span>
+						<form action="#" id="contact_form" class="contact_form">
+							<div class="row">
+								<div class="col-lg-6" style="margin-bottom: 18px">
+									<div><input type="text" class="contact_input contact_input_email inpt" placeholder="Firstname" required="required"><div class="input_border"></div></div>
+								</div>
+								<div class="col-lg-6" style="margin-bottom: 18px">
+									<div><input type="text" class="contact_input contact_input_subject inpt" placeholder="Lastname" required="required"><div class="input_border"></div></div>
+								</div>
+							</div>
+							<div style="margin-bottom: 18px"><input type="text" class="contact_input contact_input_name inpt" placeholder="Delivery Address" required="required"><div class="input_border"></div></div>
+							<div><textarea class="contact_textarea contact_input inpt" placeholder="Message" required="required"></textarea><div class="input_border" style="bottom:3px"></div></div>
+							<div class="row">
+								<div class="col-lg-6" style="margin-bottom: 18px">
+									<div><input type="number" class="contact_input contact_input_email inpt" placeholder="Quantity" required="required"><div class="input_border"></div></div>
+								</div>
+								<div class="col-lg-6" style="margin-bottom: 18px">
+									<div><input type="tel" class="contact_input contact_input_subject inpt" placeholder="Contact Number" required="required"><div class="input_border"></div></div>
+								</div>
+							</div>
+							<button class="contact_button">Order Now</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Footer -->
+
+<footer class="footer">
+	<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="{% static 'images/footer.jpg' %}" data-speed="0.8"></div>
+		<div class="row footer_contact_row">
+			<div class="col-xl-10 offset-xl-1">
+				<div class="row">
+					<!-- Footer Contact Item -->
+					<div class="col-xl-4 footer_contact_col">
+					<div class="footer_contact_item d-flex flex-column align-items-center justify-content-start text-center">
+					<div class="footer_contact_icon"><img src="{% static 'images/facebook1.png' %}" alt=""></div>
+					<div class="footer_contact_title">Visit us on Facebook!</div>
+					<div class="footer_contact_list">
+						<ul>
+							<li><a href="https://www.facebook.com/sentromanilaconcept" style="color:#ffffff">SENTRO MANILA</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+					<!-- Footer Contact Item -->
+					<div class="col-xl-4 footer_contact_col">
+					<div class="footer_contact_item d-flex flex-column align-items-center justify-content-start text-center">
+					<div class="footer_contact_icon"><img src="{% static 'images/building1.png' %}" alt=""></div>
+					<div class="footer_contact_title">come & drop by</div>
+					<div class="footer_contact_list">
+						<ul style="max-width:190px">
+							<li>268 J.P Rizal St. Sta. Elena Marikina</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+					<!-- Footer Contact Item -->
+					<div class="col-xl-4 footer_contact_col">
+					<div class="footer_contact_item d-flex flex-column align-items-center justify-content-start text-center">
+					<div class="footer_contact_icon"><img src="{% static 'images/mail1.png' %}" alt=""></div>
+					<div class="footer_contact_title">send us a message</div>
+					<div class="footer_contact_list">
+						<ul>
+							<li>sentromanilaconcerns@gmail.com</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+<script src="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.js' %}"></script>
+<script src="{% static 'plugins/easing/easing.js' %}"></script>
+<script src="{% static 'plugins/parallax-js-master/parallax.min.js' %}"></script>
+<script src="{% static 'js/contact.js' %}"></script>
+</body>
+</html>
