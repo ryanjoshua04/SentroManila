@@ -31,7 +31,7 @@
 					<div class="col">
 						<div class="header_content d-flex flex-row align-items-center justify-content-start">
 							<div class="header_content_inner d-flex flex-row align-items-end justify-content-start">
-								<div class="logo"><a href=" ">SENTRO MANILA</a></div>
+								<div class="logo"><a href="/">SENTRO MANILA</a></div>
 								<div class="header_phone ml-auto">Call us: 0912-312-3121</div>
 
 								<div class="hamburger ml-auto">
@@ -82,7 +82,7 @@
 					<div class="col">
 						<div class="home_search_container">
 							<div class="home_search_content">	
-								<form action="#" class="home_search_form" id="home_search_form">
+								<form action="#" class="home_search_form" id="home_search_form">{% csrf_token %}
 									<div class="d-flex flex-lg-row flex-column justify-content-start">
 										<h3>Search Item: </h3>&nbsp;&nbsp;&nbsp;
 										<input type="text" class="search_input" placeholder="Footwear" required="required" size="100">&nbsp; &nbsp;
@@ -170,33 +170,32 @@
 									<i class="fa fa-chevron-down" aria-hidden="true"></i>
 									<ul>
 										<li class="product_sorting_btn" data-isotope-option='{ "sortBy": "original-order" }'><span>Show All</span></li>
-										<li class="product_sorting_btn" data-isotope-option='{ "sortBy": "price" }'><span>Price</span></li>
-										<li class="product_sorting_btn" data-isotope-option='{ "sortBy": "name" }'><span>Name</span></li>
+										<li class="product_sorting_btn" data-isotope-option='{ "sortBy": "name" }'><span>Name-Asc</span></li>
+										<li class="product_sorting_btn" data-isotope-option='{ "sortBy": "price" }'><span>Price-Asc</span></li>
 									</ul>
 								</li>
 							</ul>
 						</div>
-						<div class="sort_box ml-auto"><i class="fa fa-th" aria-hidden="true"></i></div>
 					</div>
 				</div>
 			</div>
+
 			<div class="row destinations_row">
 				<div class="col">
 					<div class="destinations_container item_grid">
-							{% for dest in dests %}
-							<!-- Destination -->
-							<div class="destination item">
-								<div class="destination_image">
-									<img src="{{baseUrl}}/{{dest.img}}" alt="">
-									<div class="spec_offer text-center"><a href="#">Special Offer</a></div>
+
+						{% for item in shoe %}
+						<!-- Destination -->
+						<div class="destination item">
+							<div class="destination_image">
+								<a href="order/{{item.id}}/"><img src="{{item.img.url}}" alt=""></a>
 								</div>
 								<div class="destination_content">
-									<div class="destination_title"><a href="destinations.html">{{dest.name}}</a>
+									<div class="destination_title"><a href="order/{{item.id}}/">{{item.name}}</a>
 									</div>
-									<div class="destination_subtitle">
-										<p>{{dest.desc}}</p>
+									<div class="destination_subtitle"><h5>Quantity: {{item.quantity}}</h5></p>
 									</div>
-									<div class="destination_price">From ${{dest.price}}</div>
+									<div class="destination_price">From ₱{{item.price}}</div>
 								</div>
 							</div>
 
@@ -211,7 +210,7 @@
 <!-- Footer -->
 
 <footer class="footer">
-	<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="{% static 'images/footer.jpg' %}" data-speed="0.8"></div>
+	<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="{% static 'images/footwearbackground.jpg' %}" data-speed="0.8"></div>
 		<div class="row footer_contact_row">
 			<div class="col-xl-10 offset-xl-1">
 				<div class="row">
