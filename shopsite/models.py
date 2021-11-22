@@ -18,4 +18,5 @@ class OrderItems(models.Model):
     quantity = models.BigIntegerField()
     contact_number = models.BigIntegerField()
     order_itemid = models.IntegerField()
+    item_name = models.CharField(max_length=200)
     orderdate = models.DateTimeField(auto_now_add=True)

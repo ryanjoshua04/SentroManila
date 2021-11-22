@@ -11,7 +11,7 @@ def order(request, id):
 
     return render(request,'makeorder.html', {'items': items});
 
-def makeorder(request, id):
+def makeorder(request, id, name):
     if request.method == 'POST':
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
@@ -21,10 +21,10 @@ def makeorder(request, id):
         quantity = request.POST['quantity']
         contact_number = request.POST['contact_number']
 
-        ordermade = OrderItems.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
+        ordermade = OrderItems.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
         ordermade.save();
 
-        return render(request,'home.html');
+        return render(request,'otp-confirmation.html');
     else:
         return render(request,'home.html');
 
