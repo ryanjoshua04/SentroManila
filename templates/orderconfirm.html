@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>SENTRO MANILA | ORDER</title>
+<title>SENTRO MANILA | ORDER CONFIRM</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="Travello template project">
@@ -21,8 +21,6 @@
 <div class="super_container">
 	
 	<!-- Header -->
-
-
 	<header>
 		<div class="background_image" style="background-image:url({% static 'images/footwearbackground.jpg' %})"></div>
 		<div class="container">
@@ -43,57 +41,36 @@
 				</div>
 			</div>
 	</header>
-	<!-- Order -->
-	{% for item in items %}
-	<div class="contact">
-		<div class="container">
-			<div class="row">
-				<!-- Get in touch -->
-				<div class="col-lg-6">
-					<div class="contact_content">
-						{% include 'messages.html' %}
-						{% block content %} {% endblock content %}
-						<div class="contact_title"><h2>Make an Order for:</h2></div>
-						<div class="destination_image"><img src="{{item.img.url}}" width="500" height="650" alt="Shoe error">
+<!-- Order -->
+			{% for item in items %}
+			<div class="contact">
+				<div class="container">
+                    {% include 'messages.html' %}
+                    {% block content %} {% endblock content %}
+					<span style="color:#000000;"><h2>ORDER CONFIRMED FOR:</h1></span><br>
+					<div id="content">
+					</div>
+					<div class="row">
+						<!-- Get in touch -->
+						<div class="col-lg-6">
+							<div class="contact_content">
+                                <span style="color:#000000;"><h2>{{item.name}}</h2></span>
+								<div class="destination_image"><img src="{{item.img.url}}" width="500" height="650" alt="Shoe error">
+								</div>
+							</div>
+						</div>
+
+						<!-- Contact Form -->
+							<div class="col-lg-6" ><br><br><br><br><br><br><br><br><br>
+								<div class="contact_form_container">
+                                    <span style="color:#000000;"><h1>&nbsp;&nbsp;Thank you <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for<br>ordering to us!</h1></span><br>
+                                    <button class="contact_button" type="submit"><a href="/" style="text-decoration:none; color:#FFFFFF;" >Back</a></button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-
-				<!-- Contact Form -->
-				<div class="col-lg-6" ><br>
-					<div class="contact_form_container">
-						<form action="/makeorder/{{item.id}}/{{item.name|slugify}}" id="order_form" class="order_form" method='POST'>{% csrf_token %}
-							<span style="color:#000000;"><h2>{{item.name}}</h2></span>
-							<span style="color:#000000;"><h3>₱{{item.price}}</h3></span>
-							<div class="row">
-								<div class="col-lg-6" style="margin-bottom: 18px">
-									<div><input type="text" class="contact_input contact_input_email inpt" placeholder="Firstname" name="firstname" required="required"><div class="input_border"></div></div>
-								</div>
-								<div class="col-lg-6" style="margin-bottom: 18px">
-									<div><input type="text" class="contact_input contact_input_subject inpt" placeholder="Lastname" name="lastname" required="required"><div class="input_border"></div></div>
-								</div>
-							</div>
-							<div style="margin-bottom: 18px"><input type="email" class="contact_input contact_input_name inpt" name="email_address" placeholder="Email Address" required="required"><div class="input_border"></div></div>
-							<div style="margin-bottom: 18px"><input type="text" class="contact_input contact_input_name inpt" name="address" placeholder="Delivery Address" required="required"><div class="input_border"></div></div>
-							<div><textarea class="contact_textarea contact_input inpt" placeholder="Message" name="message"></textarea><div class="input_border" style="bottom:3px"></div></div>
-							<div class="row">
-								<div class="col-lg-6" style="margin-bottom: 18px">
-									<div><input type="text" inputmode="numeric" pattern="[0-9]*" class="contact_input contact_input_email inpt" name="quantity" maxlength="2" placeholder="Quantity" required="required"><div class="input_border"></div></div>
-								</div>
-								<div class="col-lg-6" style="margin-bottom: 18px">
-									<div><input type="text" inputmode="numeric" pattern="[0-9]*" class="contact_input contact_input_subject inpt" name="contact_number" minlength="11" maxlength="11" placeholder="Contact Number" required="required"><div class="input_border"></div></div>
-								</div>
-								<input type="hidden" name="next" value="{{ request.GET.next }}">
-							</div>
-							<button class="contact_button" type="submit">Order Now</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	{% endfor %}
-
+			{% endfor %}
 <!-- Footer -->
 
 <footer class="footer">

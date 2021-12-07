@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>SENTRO MANILA | ORDER</title>
+<title>SENTRO MANILA | OTP</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="Travello template project">
@@ -21,8 +21,6 @@
 <div class="super_container">
 	
 	<!-- Header -->
-
-
 	<header>
 		<div class="background_image" style="background-image:url({% static 'images/footwearbackground.jpg' %})"></div>
 		<div class="container">
@@ -43,23 +41,41 @@
 				</div>
 			</div>
 	</header>
-	<!-- Order -->
+<!-- Order -->
+			{% for item in items %}
+			<div class="contact">
+				<div class="container">
+					<span style="color:#000000;"><h2>Sentro Manila sent the One-Time Password to your email.</h2></span><br>
+					<div id="content">
+					</div>
+					<div class="row">
+						<!-- Get in touch -->
+						<div class="col-lg-6">
+							<div class="contact_content">
+								<div class="destination_image"><img src="{{item.img.url}}" width="500" height="650" alt="Shoe error">
+								</div>
+							</div>
+						</div>
 
-	<div class="contact">
-		<div class="container">
-			<div class="row">
-
-				<!-- Contact Form -->
-				<div class="col-lg-6" ><br>
-					<div class="contact_form_container">
-						<div><h1>OTP CONFIRMATION PAGE!!!</h1></div>
-                        <div><h2>THIS PAGE IS UNDER CONSTRUCTION</h2></div>
+						<!-- Contact Form -->
+							<div class="col-lg-6" ><br>
+								<div class="contact_form_container">
+									<form action="/otp_confirmation/{{item.id}}/{{item.name|slugify}}" id="contact_form" class="contact_form" method='POST'>{% csrf_token %}
+										<span style="color:#000000;"><h3>Please enter your OTP: </h3></span><br>
+										<div class="row">
+											<div class="col-lg-6" style="margin-bottom: 18px">
+												<div><input type="tel" class="search_input" placeholder="OTP" size="70" name="otp_confirm" minlength="6" maxlength="6" required="required"><div class="input_border"></div></div>
+											</div>
+										</div>
+										<button class="contact_button" type="submit">Confirm</button><br><br><br>
+										<div><img src="https://i.imgur.com/WXo7MxY.gif" width="500" height="300" alt="Image error"></div>
+									</form>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-
+			{% endfor %}
 <!-- Footer -->
 
 <footer class="footer">
