@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>SENTRO MANILA | ORDER</title>
+<title>SENTRO MANILA | OTP</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="Travello template project">
@@ -21,8 +21,6 @@
 <div class="super_container">
 	
 	<!-- Header -->
-
-
 	<header>
 		<div class="background_image" style="background-image:url({% static 'images/footwearbackground.jpg' %})"></div>
 		<div class="container">
@@ -43,57 +41,41 @@
 				</div>
 			</div>
 	</header>
-	<!-- Order -->
-	{% for item in items %}
-	<div class="contact">
-		<div class="container">
-			<div class="row">
-				<!-- Get in touch -->
-				<div class="col-lg-6">
-					<div class="contact_content">
-						{% include 'messages.html' %}
-						{% block content %} {% endblock content %}
-						<div class="contact_title"><h2>Make an Order for:</h2></div>
-						<div class="destination_image"><img src="{{item.img.url}}" width="500" height="650" alt="Shoe error">
+<!-- Order -->
+			{% for item in items %}
+			<div class="contact">
+				<div class="container">
+					<span style="color:#000000;"><h2>Sentro Manila sent the One-Time Password to your email.</h2></span><br>
+					<div id="content">
+					</div>
+					<div class="row">
+						<!-- Get in touch -->
+						<div class="col-lg-6">
+							<div class="contact_content">
+								<div class="destination_image"><img src="{{item.img.url}}" width="500" height="650" alt="Shoe error">
+								</div>
+							</div>
+						</div>
+
+						<!-- Contact Form -->
+							<div class="col-lg-6" ><br>
+								<div class="contact_form_container">
+									<form action="/otp_confirmation/{{item.id}}/{{item.name|slugify}}" id="contact_form" class="contact_form" method='POST'>{% csrf_token %}
+										<span style="color:#000000;"><h3>Please enter your OTP: </h3></span><br>
+										<div class="row">
+											<div class="col-lg-6" style="margin-bottom: 18px">
+												<div><input type="tel" class="search_input" placeholder="OTP" size="70" name="otp_confirm" minlength="6" maxlength="6" required="required"><div class="input_border"></div></div>
+											</div>
+										</div>
+										<button class="contact_button" type="submit">Confirm</button><br><br><br>
+										<div><img src="https://i.imgur.com/WXo7MxY.gif" width="500" height="300" alt="Image error"></div>
+									</form>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-
-				<!-- Contact Form -->
-				<div class="col-lg-6" ><br>
-					<div class="contact_form_container">
-						<form action="/makeorder/{{item.id}}/{{item.name|slugify}}" id="order_form" class="order_form" method='POST'>{% csrf_token %}
-							<span style="color:#000000;"><h2>{{item.name}}</h2></span>
-							<span style="color:#000000;"><h3>₱{{item.price}}</h3></span>
-							<div class="row">
-								<div class="col-lg-6" style="margin-bottom: 18px">
-									<div><input type="text" class="contact_input contact_input_email inpt" placeholder="Firstname" name="firstname" required="required"><div class="input_border"></div></div>
-								</div>
-								<div class="col-lg-6" style="margin-bottom: 18px">
-									<div><input type="text" class="contact_input contact_input_subject inpt" placeholder="Lastname" name="lastname" required="required"><div class="input_border"></div></div>
-								</div>
-							</div>
-							<div style="margin-bottom: 18px"><input type="email" class="contact_input contact_input_name inpt" name="email_address" placeholder="Email Address" required="required"><div class="input_border"></div></div>
-							<div style="margin-bottom: 18px"><input type="text" class="contact_input contact_input_name inpt" name="address" placeholder="Delivery Address" required="required"><div class="input_border"></div></div>
-							<div><textarea class="contact_textarea contact_input inpt" placeholder="Message" name="message"></textarea><div class="input_border" style="bottom:3px"></div></div>
-							<div class="row">
-								<div class="col-lg-6" style="margin-bottom: 18px">
-									<div><input type="text" inputmode="numeric" pattern="[0-9]*" class="contact_input contact_input_email inpt" name="quantity" maxlength="2" placeholder="Quantity" required="required"><div class="input_border"></div></div>
-								</div>
-								<div class="col-lg-6" style="margin-bottom: 18px">
-									<div><input type="text" inputmode="numeric" pattern="[0-9]*" class="contact_input contact_input_subject inpt" name="contact_number" minlength="11" maxlength="11" placeholder="Contact Number" required="required"><div class="input_border"></div></div>
-								</div>
-								<input type="hidden" name="next" value="{{ request.GET.next }}">
-							</div>
-							<button class="contact_button" type="submit">Order Now</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	{% endfor %}
-
+			{% endfor %}
 <!-- Footer -->
 
 <footer class="footer">
@@ -153,12 +135,5 @@
 <script src="{% static 'plugins/easing/easing.js' %}"></script>
 <script src="{% static 'plugins/parallax-js-master/parallax.min.js' %}"></script>
 <script src="{% static 'js/contact.js' %}"></script>
-<script>
-	setTimeout(function(){
-		if ($('#msg').length > 0){
-			$('#msg').remove();
-		}
-	}, 5000)
-</script>
 </body>
 </html>
