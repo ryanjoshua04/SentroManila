@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.shortcuts import HttpResponseRedirect
 from .models import Items
 from .models import OrderItems
 from django.db.models import F
@@ -16,6 +17,7 @@ def order(request, id):
 
 def makeorder(request, id, name):
     items = Items.objects.filter(id=id)
+    back = "/order/{}".format(id)
 
     global firstname, lastname, email_address, address, message, quantity, contact_number, orderverification, OTP, ordermade
     if request.method == 'POST':
@@ -27,18 +29,20 @@ def makeorder(request, id, name):
         quantity = request.POST['quantity']
         contact_number = request.POST['contact_number']
 
-        digits="ABCDEFG0123456789"
-        OTP=""
-        for i in range(6):
-            OTP+=digits[math.floor(random.random()*10)]
+        checkquantity = Items.objects.get(id=id).quantity
+        if checkquantity >= int(quantity):
+            digits="ABCDEFG0123456789"
+            OTP=""
+            for i in range(6):
+                OTP+=digits[math.floor(random.random()*10)]
 
-        s = smtplib.SMTP('smtp.gmail.com', 587)
-        s.starttls()
-        s.login("inquiresentromanila@gmail.com", "lmvhvthoqmonrnnt")
+            s = smtplib.SMTP('smtp.gmail.com', 587)
+            s.starttls()
+            s.login("inquiresentromanila@gmail.com", "lmvhvthoqmonrnnt")
 
-        emailid = email_address
+            emailid = email_address
 
-        msg = """From: Sentro Manila <inquiresentromanila@gmail.com>
+            msg = """From: Sentro Manila <inquiresentromanila@gmail.com>
 To: Customer <{}>
 MIME-Version: 1.0
 Content-type: text/html
@@ -49,13 +53,22 @@ Subject: OTP for order confirmation
 <i>IMPORTANT: The contents of this email and any attachments are confidential. It is strictly forbidden to share any part of this message with any third party, without a written consent of the sender. If you received this message by mistake, please reply to this message and follow with its deletion, so that we can ensure such a mistake does not occur in the future.</i>
 """.format(emailid,OTP)
 
-        s.sendmail('&&&&&&&&&&&',emailid,msg)
-        return render(request,'otp-confirmation.html', {'items': items});
+            s.sendmail('&&&&&&&&&&&',emailid,msg)
+            return render(request,'otp-confirmation.html', {'items': items});
+
+        elif checkquantity < int(quantity) and checkquantity > 1:
+            messages.error(request, 'ORDER FAILED! You are trying to order a quantity above the current stocks')
+            return redirect(back)
+
+        else:
+            messages.error(request, 'ORDER FAILED! You are trying to order on a sold out item')
+            return redirect(back)
     else:
         return render(request,'home.html');
 
 def otp_confirmation(request, id, name):
     items = Items.objects.filter(id=id)
+    back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
         if customerinput == OTP:
@@ -68,7 +81,22 @@ def otp_confirmation(request, id, name):
             messages.success(request, 'Order was made successfully!')
             return render(request,'orderconfirm.html', {'items': items});
         else:
-            messages.warning(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again')
-            return render(request,'orderdenied.html', {'items': items});
+            messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
+            return redirect(back)
     else:
         return render(request,'otp-confirmation.html');
+
+def searchItem(request):
+    if request.method == 'POST':
+        search = request.POST['search']
+        if Items.objects.filter(name__icontains=search).exists():
+            shoe = Items.objects.filter(name__icontains=search)
+            messages.success(request, 'Result for searched item: '+ search)
+            return render(request,'home.html', {'shoe': shoe});
+        else:
+            shoe = Items.objects.all()
+            messages.info(request, 'Sorry, no result for footware item: '+ search)
+            return redirect('/')
+    else:
+        shoe = Items.objects.all()
+        return redirect('/')
