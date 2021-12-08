@@ -30,14 +30,6 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</div>
 				
-				<div>
-					<br><form action="#" class="home_search_form" id="home_search_form">{% csrf_token %}
-						<div class="d-flex flex-lg-row flex-column justify-content-start">
-							<input type="text" class="search_input" placeholder="Search an Item" required="required" size="80">&nbsp; &nbsp;
-							<button class="home_search_button">search</button>
-						</div>
-					</form>
-				</div>
 				</div>
 			</div>
 	</header>
@@ -47,7 +39,7 @@
 				<div class="container">
                     {% include 'messages.html' %}
                     {% block content %} {% endblock content %}
-					<span style="color:#000000;"><h2>ORDER CONFIRMED FOR:</h1></span><br>
+					<span style="color:#000000;"><h2>ORDER CONFIRMED FOR:</h1></span>
 					<div id="content">
 					</div>
 					<div class="row">
@@ -61,7 +53,7 @@
 						</div>
 
 						<!-- Contact Form -->
-							<div class="col-lg-6" ><br><br><br><br><br><br><br><br><br>
+							<div class="col-lg-6" ><br><br><br><br><br><br>
 								<div class="contact_form_container">
                                     <span style="color:#000000;"><h1>&nbsp;&nbsp;Thank you <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for<br>ordering to us!</h1></span><br>
 									<form method="get" action="/">
@@ -147,7 +139,7 @@
 		if ($('#msg').length > 0){
 			$('#msg').remove();
 		}
-	}, 5000)
+	}, 10000)
 </script>
 </body>
 </html>
