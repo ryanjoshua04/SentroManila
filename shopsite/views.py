@@ -17,7 +17,7 @@ def makeorder(request, id, name):
     items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
 
-    global firstname, lastname, email_address, address, message, quantity, contact_number, orderverification, OTP, ordermade, emailid
+    global firstname, lastname, email_address, address, message, quantity, contact_number, orderverification, OTP, ordermade, emailid, email
     if request.method == 'POST':
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
@@ -42,10 +42,10 @@ def makeorder(request, id, name):
 
             saveotp = OTPs.objects.create(otpcurrent=OTP, emailotp=emailid)
             saveotp.save()
-            getemail = OTPs.objects.get(emailotp=emailid)
-            global email
+            
+            checkemail = OTPs.objects.get(emailotp=emailid).emailotp
             def email():
-                return getemail
+                return checkemail
 
             msg = """From: Sentro Manila <inquiresentromanila@gmail.com>
 To: Customer <{}>
