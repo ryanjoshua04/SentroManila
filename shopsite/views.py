@@ -114,7 +114,7 @@ def otp_confirmation(request, id, name):
                 OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=120)).delete()
                 messages.success(request, 'Order was made successfully!')
                 return render(request,'orderconfirm.html', {'items': items});
-            elif checkquantity < int(quantity) and checkquantity > 1:
+            elif checkquantity2 < int(quantity) and checkquantity2 > 1:
                 messages.error(request, 'ORDER FAILED! You are trying to order a quantity above the current stocks')
                 return redirect(back)
 
