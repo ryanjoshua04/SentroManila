@@ -17,7 +17,7 @@ def makeorder(request, id, name):
     items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
 
-    global firstname, lastname, email_address, address, message, quantity, contact_number, orderverification, OTP, ordermade, emailid, email
+    global firstname, lastname, email_address, address, message, quantity, contact_number, orderverification, OTP, ordermade, emailid
     if request.method == 'POST':
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
@@ -43,10 +43,6 @@ def makeorder(request, id, name):
             saveotp = OTPs.objects.create(otpcurrent=OTP, emailotp=emailid)
             saveotp.save()
             
-            checkemail = OTPs.objects.get(emailotp=emailid).emailotp
-            def email():
-                return checkemail
-
             msg = """From: Sentro Manila <inquiresentromanila@gmail.com>
 To: Customer <{}>
 MIME-Version: 1.0
@@ -76,9 +72,8 @@ def otp_confirmation(request, id, name):
     back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
-        otpemail = email()
-        checkotp = OTPs.objects.get(emailotp=otpemail).otpcurrent
-        if customerinput == checkotp:
+        checkotp = OTPs.objects.get(otpcurrent=customerinput).exists()
+        if checkotp == True:
             ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
             ordermade.save()
             currentquantity = Item.objects.get(id=id)
@@ -86,14 +81,12 @@ def otp_confirmation(request, id, name):
             currentquantity.quantity = F('quantity') - quantity
             currentquantity.save()
 
-            delete_otp = OTPs.objects.get(emailotp=otpemail)
+            delete_otp = OTPs.objects.get(otpcurrent=customerinput)
             delete_otp.delete()
             messages.success(request, 'Order was made successfully!')
             return render(request,'orderconfirm.html', {'items': items});
         else:
             messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
-            delete_otp = OTPs.objects.get(emailotp=otpemail)
-            delete_otp.delete()
             return redirect(back)
     else:
         return render(request,'otp-confirmation.html');
