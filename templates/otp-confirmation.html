@@ -31,7 +31,7 @@
 				</div>
 	</header>
 <!-- Order -->
-			{% for item in items and customer in customers %}
+			{% for item in items %}
 			<div class="contact">
 				<div class="container">
 					<span style="color:#000000;"><h2>Sentro Manila sent the One-Time Password to your email.</h2></span><br>
@@ -49,7 +49,9 @@
 						<!-- Contact Form -->
 							<div class="col-lg-6" ><br>
 								<div class="contact_form_container">
+									{% for customer in customers %}
 									<form action="/otp_confirmation/{{item.id}}/{{item.name|slugify}}/{{customer.contact_number}}" id="contact_form" class="contact_form" method='POST'>{% csrf_token %}
+										{% endfor %}
 										<span style="color:#000000;"><h3>Please enter your OTP: </h3></span><br>
 										<div class="row">
 											<div class="col-lg-6" style="margin-bottom: 18px">
