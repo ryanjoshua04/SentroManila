@@ -26,6 +26,10 @@ def makeorder(request, id, name):
         message = request.POST['message']
         quantity = request.POST['quantity']
         contact_number = request.POST['contact_number']
+        
+        global email
+        def email():
+            return email_address
 
         checkquantity = Item.objects.get(id=id).quantity
         if checkquantity >= int(quantity):
@@ -67,12 +71,12 @@ Subject: OTP for order confirmation
     else:
         return render(request,'home.html');
 
-def otp_confirmation(request, id, name, email_address):
+def otp_confirmation(request, id, name):
     items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
-        emailid = email_address
+        emailid = email()
         checkotp = OTPs.objects.get(emailotp=emailid).otpcurrent
         if customerinput == checkotp:
             ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
