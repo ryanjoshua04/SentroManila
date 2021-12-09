@@ -17,7 +17,7 @@ def makeorder(request, id, name):
     items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
 
-    global firstname, lastname, email_address, address, message, quantity, contact_number, orderverification, OTP, ordermade, emailid
+    global firstname, lastname, email_address, address, message, quantity, contact_number, orderverification, OTP, ordermade
     if request.method == 'POST':
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
@@ -40,7 +40,7 @@ def makeorder(request, id, name):
             for i in range(6):
                 OTP+=digits[math.floor(random.random()*10)]
 
-            saveotp = OTPs.objects.create(otpcurrent=OTP, emailotp=emailid)
+            saveotp = OTPs.objects.create(otpcurrent=OTP, emailotp=email_address)
             saveotp.save()
 
             msg = """From: Sentro Manila <inquiresentromanila@gmail.com>
@@ -72,7 +72,7 @@ def otp_confirmation(request, id, name):
     back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
-        checkotp = OTPs.objects.get(emailotp=emailid).otpcurrent
+        checkotp = OTPs.objects.get(emailotp=email_address).otpcurrent
         if customerinput == checkotp:
             ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
             ordermade.save()
