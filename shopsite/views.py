@@ -26,7 +26,7 @@ def makeorder(request, id, name):
         message = request.POST['message']
         quantity = request.POST['quantity']
         contact_number = request.POST['contact_number']
-        
+
         global email
         def email():
             return email_address
@@ -92,6 +92,8 @@ def otp_confirmation(request, id, name):
             return render(request,'orderconfirm.html', {'items': items});
         else:
             messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
+            delete_otp = OTPs.objects.filter(emailotp=emailid)
+            delete_otp.delete()
             return redirect(back)
     else:
         return render(request,'otp-confirmation.html');
