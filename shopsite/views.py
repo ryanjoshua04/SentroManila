@@ -29,21 +29,6 @@ def makeorder(request, id, name):
         quantity = request.POST['quantity']
         contact_number = request.POST['contact_number']
 
-        def first():
-            return firstname
-        def last():
-            return lastname
-        def email():
-            return email_address
-        def add():
-            return address
-        def mes():
-            return message
-        def quan():
-            return quantity
-        def contact():
-            return contact_number
-
         checkquantity = Item.objects.get(id=id).quantity
         if checkquantity >= int(quantity):
             s = smtplib.SMTP('smtp.gmail.com', 587)
@@ -72,7 +57,13 @@ Subject: OTP for order confirmation
 """.format(emailid,OTP)
 
             s.sendmail('&&&&&&&&&&&',emailid,msg)
-            return render(request,'otp-confirmation.html', {'items': items});
+
+            ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
+            ordermade.save()
+
+            customers =  OrderItem.objects.filter(contact_number=contact_number)
+
+            return render(request,'otp-confirmation.html', {'items': items, 'customer': customers});
 
         elif checkquantity < int(quantity) and checkquantity > 1:
             messages.error(request, 'ORDER FAILED! You are trying to order a quantity above the current stocks')
@@ -84,7 +75,7 @@ Subject: OTP for order confirmation
     else:
         return render(request,'home.html');
 
-def otp_confirmation(request, id, name):
+def otp_confirmation(request, id, name, contact_number):
     items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
     if request.method == 'POST':
@@ -92,18 +83,8 @@ def otp_confirmation(request, id, name):
         checkotp = OTPs.objects.filter(otpcurrent=customerinput).exists()
         if checkotp == True:
             checkquantity2 = Item.objects.get(id=id).quantity
-            quantity = quan()
+            quantity = OrderItem.objects.filter(contact_number=contact_number).quantity
             if checkquantity2 >= int(quantity):
-                firstname = first()
-                lastname = last()
-                email_address = email()
-                address = add()
-                message = mes()
-                quantity = quan()
-                contact_number = contact()
-                
-                ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
-                ordermade.save()
                 currentquantity = Item.objects.get(id=id)
                 
                 currentquantity.quantity = F('quantity') - quantity
@@ -115,10 +96,12 @@ def otp_confirmation(request, id, name):
                 messages.success(request, 'Order was made successfully!')
                 return render(request,'orderconfirm.html', {'items': items});
             elif checkquantity2 < int(quantity) and checkquantity2 > 1:
+                OrderItem.objects.filter(contact_number=contact_number).delete()
                 messages.error(request, 'ORDER FAILED! You are trying to order a quantity above the current stocks')
                 return redirect(back)
 
             else:
+                OrderItem.objects.filter(contact_number=contact_number).delete()
                 messages.error(request, 'ORDER FAILED! You are trying to order on a sold out item')
                 return redirect(back)
 
@@ -126,9 +109,11 @@ def otp_confirmation(request, id, name):
             checkexpire = OTPs.objects.filter(otp_expire__lte=datetime.now()).exists()
             if checkexpire == True:
                 OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=120)).delete()
+                OrderItem.objects.filter(contact_number=contact_number).delete()
                 messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
                 return redirect(back)
             else:
+                OrderItem.objects.filter(contact_number=contact_number).delete()
                 messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
                 return redirect(back)
     else:
