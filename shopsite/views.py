@@ -87,7 +87,7 @@ def otp_confirmation(request, id, name):
     back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
-        checkotp = OTPs.objects.get(otpcurrent=customerinput).exists()
+        checkotp = OTPs.objects.filter(otpcurrent=customerinput).exists()
         emailotp2 = email()
         if checkotp == True:
             firstname = first()
