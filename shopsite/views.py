@@ -3,7 +3,7 @@ from .models import Item, OrderItem, OTPs
 from django.db.models import F
 from django.contrib import messages
 import math, random, smtplib
-from django.utils import timezone
+from datetime import datetime, timedelta
 # Create your views here.
 
 def home(request):
@@ -112,10 +112,9 @@ def otp_confirmation(request, id, name):
             return render(request,'orderconfirm.html', {'items': items});
 
         else:
-            time = timezone.now()
-            checkexpire = OTPs.objects.filter(otp_expire__lte=time).exists()
-            if checkexpire == False:
-                delete_expire = OTPs.objects.filter(otp_expire__lt=time).delete()
+            checkexpire = OTPs.objects.filter(otp_expire__lte=datetime.now()).exists()
+            if checkexpire == True:
+                delete_expire = OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=60)).delete()
                 delete_expire.save()
                 messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
                 return redirect(back)
