@@ -55,6 +55,14 @@ class Orders(admin.ModelAdmin):
         
     download_as_csv.short_description = 'Download Selected Orders as CSV'
 
+
+class otp(admin.ModelAdmin):
+    model = OrderItem
+
+    readonly_fields = ['otpcurrent','emailotp','otp_expire']
+
+    list_display = ('otpcurrent','emailotp','otp_expire') 
+
 admin.site.register(Item)
-admin.site.register(OTPs)
+admin.site.register(OTPs,otp)
 admin.site.register(OrderItem, Orders)
