@@ -1,22 +1,21 @@
 from django.shortcuts import redirect, render
-from django.shortcuts import HttpResponseRedirect
-from .models import Items
-from .models import OrderItems
+from .models import Item
+from .models import OrderItem
 from django.db.models import F
 from django.contrib import messages
 import math, random, smtplib
 # Create your views here.
 def home(request):
-    shoe = Items.objects.all()
+    shoe = Item.objects.all()
     return render(request,'home.html', {'shoe': shoe});
 
 def order(request, id):
-    items = Items.objects.filter(id=id)
+    items = Item.objects.filter(id=id)
 
     return render(request,'makeorder.html', {'items': items});
 
 def makeorder(request, id, name):
-    items = Items.objects.filter(id=id)
+    items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
 
     global firstname, lastname, email_address, address, message, quantity, contact_number, orderverification, OTP, ordermade
@@ -29,7 +28,7 @@ def makeorder(request, id, name):
         quantity = request.POST['quantity']
         contact_number = request.POST['contact_number']
 
-        checkquantity = Items.objects.get(id=id).quantity
+        checkquantity = Item.objects.get(id=id).quantity
         if checkquantity >= int(quantity):
             digits="ABCDEFG0123456789"
             OTP=""
@@ -67,14 +66,14 @@ Subject: OTP for order confirmation
         return render(request,'home.html');
 
 def otp_confirmation(request, id, name):
-    items = Items.objects.filter(id=id)
+    items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
         if customerinput == OTP:
-            ordermade = OrderItems.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
+            ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
             ordermade.save()
-            currentquantity = Items.objects.get(id=id)
+            currentquantity = Item.objects.get(id=id)
             
             currentquantity.quantity = F('quantity') - quantity
             currentquantity.save()
@@ -89,14 +88,14 @@ def otp_confirmation(request, id, name):
 def searchItem(request):
     if request.method == 'POST':
         search = request.POST['search']
-        if Items.objects.filter(name__icontains=search).exists():
-            shoe = Items.objects.filter(name__icontains=search)
+        if Item.objects.filter(name__icontains=search).exists():
+            shoe = Item.objects.filter(name__icontains=search)
             messages.success(request, 'Result for searched item: '+ search)
             return render(request,'home.html', {'shoe': shoe});
         else:
-            shoe = Items.objects.all()
+            shoe = Item.objects.all()
             messages.info(request, 'Sorry, no result for footware item: '+ search)
             return redirect('/')
     else:
-        shoe = Items.objects.all()
+        shoe = Item.objects.all()
         return redirect('/')
