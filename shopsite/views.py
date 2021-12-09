@@ -30,16 +30,16 @@ def makeorder(request, id, name):
 
         checkquantity = Item.objects.get(id=id).quantity
         if checkquantity >= int(quantity):
-            digits="ABCDEFG0123456789"
-            OTP=""
-            for i in range(6):
-                OTP+=digits[math.floor(random.random()*10)]
-
             s = smtplib.SMTP('smtp.gmail.com', 587)
             s.starttls()
             s.login("inquiresentromanila@gmail.com", "lmvhvthoqmonrnnt")
 
             emailid = email_address
+
+            digits="ABCDEFG0123456789"
+            OTP=""
+            for i in range(6):
+                OTP+=digits[math.floor(random.random()*10)]
 
             msg = """From: Sentro Manila <inquiresentromanila@gmail.com>
 To: Customer <{}>
