@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from .models import Item, OrderItem, OTPs
 from django.db.models import F
 from django.contrib import messages
-import math, random, smtplib
+import math, random, smtplib, time
 # Create your views here.
 def home(request):
     shoe = Item.objects.all()
@@ -87,8 +87,7 @@ def otp_confirmation(request, id, name):
     back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
-        checkotp = OTPs.objects.filter(otpcurrent=customerinput).exists()
-        emailotp2 = email()
+        checkotp = OTPs.objects.get(otpcurrent=customerinput)
         if checkotp == True:
             firstname = first()
             lastname = last()
@@ -109,9 +108,8 @@ def otp_confirmation(request, id, name):
             delete_otp.delete()
             messages.success(request, 'Order was made successfully!')
             return render(request,'orderconfirm.html', {'items': items});
+
         else:
-            delete_otp = OTPs.objects.get(emailotp=emailotp2)
-            delete_otp.delete()
             messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
             return redirect(back)
     else:
