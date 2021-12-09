@@ -23,10 +23,22 @@ class OrderItem(models.Model):
     contact_number = models.BigIntegerField()
     order_itemid = models.IntegerField()
     item_name = models.CharField(max_length=200)
-    orderdate = models.DateTimeField(auto_now_add=True)
+    orderdate = models.DateTimeField()
     status = models.TextField(default='Pending', editable=True)
 
 class OTPs(models.Model):
     otpcurrent = models.TextField()
     emailotp = models.CharField(max_length=200)
     otp_expire = models.DateTimeField(auto_now_add=True)
+
+class UnconfirmOrders(models.Model):
+    firstname = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
+    email_address = models.CharField(max_length=200)
+    address = models.CharField(max_length=500)
+    message = models.TextField()
+    quantity = models.BigIntegerField()
+    contact_number = models.BigIntegerField()
+    order_itemid = models.IntegerField()
+    item_name = models.CharField(max_length=200)
+    orderdate = models.DateTimeField(auto_now_add=True)
