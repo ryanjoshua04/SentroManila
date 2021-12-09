@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, OrderItem
+from .models import Item, OrderItem, OTPs
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 import csv
@@ -56,4 +56,5 @@ class Orders(admin.ModelAdmin):
     download_as_csv.short_description = 'Download Selected Orders as CSV'
 
 admin.site.register(Item)
+admin.site.register(OTPs)
 admin.site.register(OrderItem, Orders)
