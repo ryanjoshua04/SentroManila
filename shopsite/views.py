@@ -17,7 +17,7 @@ def makeorder(request, id, name):
     items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
 
-    global firstname, lastname, email_address, address, message, quantity, contact_number, orderverification, OTP, ordermade
+    global firstname, lastname, email_address, address, message, quantity, contact_number, orderverification, OTP, ordermade, emailid
     if request.method == 'POST':
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
@@ -72,7 +72,8 @@ def otp_confirmation(request, id, name):
     back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
-        checkotp = OTPs.objects.get(emailotp=email_address).otpcurrent
+        emailid = email_address
+        checkotp = OTPs.objects.get(emailotp=emailid).otpcurrent
         if customerinput == checkotp:
             ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
             ordermade.save()
@@ -81,7 +82,7 @@ def otp_confirmation(request, id, name):
             currentquantity.quantity = F('quantity') - quantity
             currentquantity.save()
 
-            delete_otp = OTPs.objects.filter(emailotp=email_address)
+            delete_otp = OTPs.objects.filter(emailotp=emailid)
             delete_otp.delete()
             messages.success(request, 'Order was made successfully!')
             return render(request,'orderconfirm.html', {'items': items});
