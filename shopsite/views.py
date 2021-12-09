@@ -34,9 +34,6 @@ def makeorder(request, id, name):
             s.login("inquiresentromanila@gmail.com", "lmvhvthoqmonrnnt")
 
             emailid = email_address
-            global email
-            def email():
-                return emailid
 
             digits="ABCDEFG0123456789"
             OTP=""
@@ -45,6 +42,10 @@ def makeorder(request, id, name):
 
             saveotp = OTPs.objects.create(otpcurrent=OTP, emailotp=emailid)
             saveotp.save()
+            getemail = OTPs.objects.get(emailotp=emailid)
+            global email
+            def email():
+                return getemail
 
             msg = """From: Sentro Manila <inquiresentromanila@gmail.com>
 To: Customer <{}>
