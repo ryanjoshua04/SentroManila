@@ -112,7 +112,7 @@ def otp_confirmation(request, id, name):
             return render(request,'orderconfirm.html', {'items': items});
 
         else:
-            checkexpire = OTPs.objects.filter(otp_expire=datetime.now()).exist
+            checkexpire = OTPs.objects.filter(otp_expire__lte=datetime.now()).exists()
             if checkexpire == False:
                 OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=60)).delete()
                 messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
