@@ -87,18 +87,18 @@ def otp_confirmation(request, id, name, contact_number):
         checkotp = OTPs.objects.filter(otpcurrent=customerinput).exists()
         if checkotp == True:
             checkquantity2 = Item.objects.get(id=id).quantity
-            orders = UnconfirmOrders.objects.filter(contact_number=contact_number).quantity
-            if checkquantity2 >= int(orders):
-                firstname = UnconfirmOrders.objects.filter(contact_number=contact_number).firstname
-                lastname = UnconfirmOrders.objects.filter(contact_number=contact_number).lastname
-                email_address = UnconfirmOrders.objects.filter(contact_number=contact_number).email_address
-                address = UnconfirmOrders.objects.filter(contact_number=contact_number).address
-                message = UnconfirmOrders.objects.filter(contact_number=contact_number).message
-                quantity = UnconfirmOrders.objects.filter(contact_number=contact_number).quantity
-                contact_number = UnconfirmOrders.objects.filter(contact_number=contact_number).contact_number
-                order_itemid = UnconfirmOrders.objects.filter(contact_number=contact_number).order_itemid
-                item_name = UnconfirmOrders.objects.filter(contact_number=contact_number).item_name
-                orderdate = UnconfirmOrders.objects.filter(contact_number=contact_number).orderdate
+            quantity = UnconfirmOrders.objects.get(contact_number=contact_number).quantity
+            if checkquantity2 >= int(quantity):
+                firstname = UnconfirmOrders.objects.get(contact_number=contact_number).firstname
+                lastname = UnconfirmOrders.objects.get(contact_number=contact_number).lastname
+                email_address = UnconfirmOrders.objects.get(contact_number=contact_number).email_address
+                address = UnconfirmOrders.objects.get(contact_number=contact_number).address
+                message = UnconfirmOrders.objects.get(contact_number=contact_number).message
+                quantity = UnconfirmOrders.objects.get(contact_number=contact_number).quantity
+                contact_number = UnconfirmOrders.objects.get(contact_number=contact_number).contact_number
+                order_itemid = UnconfirmOrders.objects.get(contact_number=contact_number).order_itemid
+                item_name = UnconfirmOrders.objects.get(contact_number=contact_number).item_name
+                orderdate = UnconfirmOrders.objects.get(contact_number=contact_number).orderdate
 
                 confirmorder = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = item_name, message=message, orderdate=orderdate, quantity=quantity, contact_number=contact_number, order_itemid=order_itemid)
                 confirmorder.save()
@@ -114,8 +114,7 @@ def otp_confirmation(request, id, name, contact_number):
                 OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=120)).delete()
                 messages.success(request, 'Order was made successfully!')
                 return render(request,'orderconfirm.html', {'items': items});
-
-            elif checkquantity2 < int(orders) and checkquantity2 > 1:
+            elif checkquantity2 < int(quantity) and checkquantity2 > 1:
                 UnconfirmOrders.objects.filter(contact_number=contact_number).delete()
                 messages.error(request, 'ORDER FAILED! You are trying to order a quantity above the current stocks')
                 return redirect(back)
