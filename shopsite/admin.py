@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, OrderItem, OTPs, UnconfirmOrders
+from .models import Item, OrderItem
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 import csv
@@ -54,14 +54,6 @@ class Orders(admin.ModelAdmin):
         return response
         
     download_as_csv.short_description = 'Download Selected Orders as CSV'
-
-
-class Unconfirm(admin.ModelAdmin):
-
-    readonly_fields = ['firstname','lastname','email_address','address','message','quantity','contact_number','order_itemid','item_name','orderdate']
-
-    list_display = ('firstname','lastname','address','quantity','contact_number','item_name','orderdate')
-
+    
 admin.site.register(Item)
-admin.site.register(UnconfirmOrders, Unconfirm)
 admin.site.register(OrderItem, Orders)
