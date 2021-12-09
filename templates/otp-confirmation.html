@@ -51,7 +51,6 @@
 								<div class="contact_form_container">
 									{% for customer in customers %}
 									<form action="/otp_confirmation/{{item.id}}/{{item.name|slugify}}/{{customer.contact_number}}" id="contact_form" class="contact_form" method='POST'>{% csrf_token %}
-										{% endfor %}
 										<span style="color:#000000;"><h3>Please enter your OTP: </h3></span><br>
 										<div class="row">
 											<div class="col-lg-6" style="margin-bottom: 18px">
@@ -61,6 +60,7 @@
 										<button class="contact_button" type="submit">Confirm</button><br><br><br>
 										<div><img src="https://i.imgur.com/WXo7MxY.gif" width="500" height="300" alt="Image error"></div>
 									</form>
+									{% endfor %}
 								</div>
 							</div>
 						</div>
