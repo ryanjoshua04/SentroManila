@@ -81,7 +81,7 @@ def otp_confirmation(request, id, name):
             currentquantity.quantity = F('quantity') - quantity
             currentquantity.save()
 
-            delete_otp = OTPs.objects.filter(emailotp=emailid)
+            delete_otp = OTPs.objects.filter(emailotp=email_address)
             delete_otp.delete()
             messages.success(request, 'Order was made successfully!')
             return render(request,'orderconfirm.html', {'items': items});
