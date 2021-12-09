@@ -86,13 +86,13 @@ def otp_confirmation(request, id, name):
             currentquantity.quantity = F('quantity') - quantity
             currentquantity.save()
 
-            delete_otp = OTPs.objects.filter(emailotp=emailid)
+            delete_otp = OTPs.objects.get(emailotp=emailid)
             delete_otp.delete()
             messages.success(request, 'Order was made successfully!')
             return render(request,'orderconfirm.html', {'items': items});
         else:
             messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
-            delete_otp = OTPs.objects.filter(emailotp=emailid)
+            delete_otp = OTPs.objects.get(emailotp=emailid)
             delete_otp.delete()
             return redirect(back)
     else:
