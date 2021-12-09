@@ -56,4 +56,5 @@ class Orders(admin.ModelAdmin):
     download_as_csv.short_description = 'Download Selected Orders as CSV'
 
 admin.site.register(Item)
+admin.site.register(OTPs)
 admin.site.register(OrderItem, Orders)
