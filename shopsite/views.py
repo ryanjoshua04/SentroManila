@@ -1,6 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import Item
-from .models import OrderItem
+from .models import Item, OrderItem, OTPs
 from django.db.models import F
 from django.contrib import messages
 import math, random, smtplib
@@ -41,6 +40,9 @@ def makeorder(request, id, name):
             for i in range(6):
                 OTP+=digits[math.floor(random.random()*10)]
 
+            saveotp = OTPs.objects.create(otpcurrent=OTP, emailotp=emailid)
+            saveotp.save()
+
             msg = """From: Sentro Manila <inquiresentromanila@gmail.com>
 To: Customer <{}>
 MIME-Version: 1.0
@@ -70,13 +72,17 @@ def otp_confirmation(request, id, name):
     back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
-        if customerinput == OTP and email_address == emailid:
+        checkotp = OTPs.objects.get(emailotp=emailid).otpcurrent
+        if customerinput == checkotp:
             ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
             ordermade.save()
             currentquantity = Item.objects.get(id=id)
             
             currentquantity.quantity = F('quantity') - quantity
             currentquantity.save()
+
+            delete_otp = OTPs.objects.filter(emailotp=emailid)
+            delete_otp.delete()
             messages.success(request, 'Order was made successfully!')
             return render(request,'orderconfirm.html', {'items': items});
         else:

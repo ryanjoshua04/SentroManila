@@ -25,3 +25,7 @@ class OrderItem(models.Model):
     item_name = models.CharField(max_length=200)
     orderdate = models.DateTimeField(auto_now_add=True)
     status = models.TextField(default='Pending', editable=True)
+
+class OTPs(models.Model):
+    otpcurrent = models.TextField()
+    emailotp = models.CharField(max_length=200)
