@@ -67,7 +67,7 @@ Subject: OTP for order confirmation
     else:
         return render(request,'home.html');
 
-def otp_confirmation(request, id, name):
+def otp_confirmation(request, id, name, email_address):
     items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
     if request.method == 'POST':
