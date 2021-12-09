@@ -17,7 +17,7 @@ def makeorder(request, id, name):
     items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
 
-    global firstname, lastname, email_address, address, message, quantity, contact_number, orderverification, OTP, ordermade, emailid
+    global first, last, email, add, mes, quan, contact
     if request.method == 'POST':
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
@@ -26,6 +26,21 @@ def makeorder(request, id, name):
         message = request.POST['message']
         quantity = request.POST['quantity']
         contact_number = request.POST['contact_number']
+
+        def first():
+            return firstname
+        def last():
+            return lastname
+        def email():
+            return email_address
+        def add():
+            return address
+        def mes():
+            return message
+        def quan():
+            return quantity
+        def contact():
+            return contact_number
 
         checkquantity = Item.objects.get(id=id).quantity
         if checkquantity >= int(quantity):
@@ -68,12 +83,20 @@ Subject: OTP for order confirmation
         return render(request,'home.html');
 
 def otp_confirmation(request, id, name):
+    items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
         checkotp = OTPs.objects.filter(otpcurrent=customerinput).exists()
         if checkotp == True:
-            items = Item.objects.filter(id=id)
+            firstname = first()
+            lastname = last()
+            email_address = email()
+            address = add()
+            message = mes()
+            quantity = quan()
+            contact_number = contact()
+
             ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
             ordermade.save()
             currentquantity = Item.objects.get(id=id)
