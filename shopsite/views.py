@@ -5,9 +5,6 @@ from django.contrib import messages
 import math, random, smtplib
 from datetime import datetime, timedelta
 # Create your views here.
-def delete_expire_otp():
-    OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=60)).delete()
-delete_expire_otp()
 
 def home(request):
     shoe = Item.objects.all()
@@ -115,8 +112,14 @@ def otp_confirmation(request, id, name):
             return render(request,'orderconfirm.html', {'items': items});
 
         else:
-            messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
-            return redirect(back)
+            checkexpire = OTPs.objects.filter(otp_expire=datetime.now()).exist
+            if checkexpire == False:
+                OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=10)).delete()
+                messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
+                return redirect(back)
+            else:
+                messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
+                return redirect(back)
     else:
         return render(request,'otp-confirmation.html');
 
