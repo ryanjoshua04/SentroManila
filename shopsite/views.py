@@ -62,7 +62,12 @@ Subject: OTP for order confirmation
 
             customers =  UnconfirmOrders.objects.filter(contact_number=contact_number)
 
-            return render(request,'otp-confirmation.html', {'items': items, 'customer': customers});
+            listvariables = zip(items, customers)
+            context = {
+                'listvariables' : listvariables,
+            }
+
+            return render(request,'otp-confirmation.html', context);
 
         elif checkquantity < int(quantity) and checkquantity > 1:
             messages.error(request, 'ORDER FAILED! You are trying to order a quantity above the current stocks')
