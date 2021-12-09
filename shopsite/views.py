@@ -91,30 +91,41 @@ def otp_confirmation(request, id, name):
         customerinput = request.POST['otp_confirm']
         checkotp = OTPs.objects.filter(otpcurrent=customerinput).exists()
         if checkotp == True:
-            firstname = first()
-            lastname = last()
-            email_address = email()
-            address = add()
-            message = mes()
+            checkquantity2 = Item.objects.get(id=id).quantity
             quantity = quan()
-            contact_number = contact()
-            
-            ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
-            ordermade.save()
-            currentquantity = Item.objects.get(id=id)
-            
-            currentquantity.quantity = F('quantity') - quantity
-            currentquantity.save()
+            if checkquantity2 >= int(quantity):
+                firstname = first()
+                lastname = last()
+                email_address = email()
+                address = add()
+                message = mes()
+                quantity = quan()
+                contact_number = contact()
+                
+                ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
+                ordermade.save()
+                currentquantity = Item.objects.get(id=id)
+                
+                currentquantity.quantity = F('quantity') - quantity
+                currentquantity.save()
 
-            delete_otp = OTPs.objects.get(otpcurrent=customerinput)
-            delete_otp.delete()
-            messages.success(request, 'Order was made successfully!')
-            return render(request,'orderconfirm.html', {'items': items});
+                delete_otp = OTPs.objects.get(otpcurrent=customerinput)
+                delete_otp.delete()
+                OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=120)).delete()
+                messages.success(request, 'Order was made successfully!')
+                return render(request,'orderconfirm.html', {'items': items});
+            elif checkquantity < int(quantity) and checkquantity > 1:
+                messages.error(request, 'ORDER FAILED! You are trying to order a quantity above the current stocks')
+                return redirect(back)
+
+            else:
+                messages.error(request, 'ORDER FAILED! You are trying to order on a sold out item')
+                return redirect(back)
 
         else:
             checkexpire = OTPs.objects.filter(otp_expire__lte=datetime.now()).exists()
             if checkexpire == True:
-                OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=60)).delete()
+                OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=120)).delete()
                 messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
                 return redirect(back)
             else:
