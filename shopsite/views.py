@@ -68,12 +68,12 @@ Subject: OTP for order confirmation
         return render(request,'home.html');
 
 def otp_confirmation(request, id, name):
-    items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
         checkotp = OTPs.objects.filter(otpcurrent=customerinput).exists()
         if checkotp == True:
+            items = Item.objects.filter(id=id)
             ordermade = OrderItem.objects.create(firstname=firstname, lastname=lastname, email_address=email_address, address=address, item_name = name, message=message, quantity=quantity, contact_number=contact_number, order_itemid=id)
             ordermade.save()
             currentquantity = Item.objects.get(id=id)
