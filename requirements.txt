@@ -36,3 +36,4 @@ six==1.15.0
 urllib3==1.26.4
 virtualenv==20.8.1
 virtualenvwrapper-win==1.2.6
+django-heroku
