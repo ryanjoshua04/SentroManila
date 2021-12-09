@@ -29,3 +29,4 @@ class OrderItem(models.Model):
 class OTPs(models.Model):
     otpcurrent = models.TextField()
     emailotp = models.CharField(max_length=200)
+    otp_expire = models.DateTimeField(auto_now_add=True)

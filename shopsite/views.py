@@ -2,8 +2,13 @@ from django.shortcuts import redirect, render
 from .models import Item, OrderItem, OTPs
 from django.db.models import F
 from django.contrib import messages
-import math, random, smtplib, time
+import math, random, smtplib
+from datetime import datetime, timedelta
 # Create your views here.
+def delete_expire_otp():
+    OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=60)).delete()
+delete_expire_otp()
+
 def home(request):
     shoe = Item.objects.all()
     return render(request,'home.html', {'shoe': shoe});
@@ -87,7 +92,7 @@ def otp_confirmation(request, id, name):
     back = "/order/{}".format(id)
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
-        checkotp = OTPs.objects.get(otpcurrent=customerinput).otpcurrent
+        checkotp = OTPs.objects.get(otpcurrent=customerinput).exists()
         if checkotp == True:
             firstname = first()
             lastname = last()
