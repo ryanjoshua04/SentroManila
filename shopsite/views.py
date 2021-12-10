@@ -7,15 +7,18 @@ from datetime import datetime, timedelta
 # Create your views here.
 
 def home(request):
+    
     shoe = Item.objects.all()
     return render(request,'home.html', {'shoe': shoe});
 
 def order(request, id):
+
     items = Item.objects.filter(id=id)
 
     return render(request,'makeorder.html', {'items': items});
 
 def makeorder(request, id, name):
+
     items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
 
@@ -29,6 +32,7 @@ def makeorder(request, id, name):
         contact_number = request.POST['contact_number']
 
         checkquantity = Item.objects.get(id=id).quantity
+
         if checkquantity >= int(quantity):
             s = smtplib.SMTP('smtp.gmail.com', 587)
             s.starttls()
@@ -80,14 +84,19 @@ Subject: OTP for order confirmation
         return render(request,'home.html');
 
 def otp_confirmation(request, id, name, contact_number):
+
     items = Item.objects.filter(id=id)
     back = "/order/{}".format(id)
+
     if request.method == 'POST':
         customerinput = request.POST['otp_confirm']
         checkotp = OTPs.objects.filter(otpcurrent=customerinput).exists()
+        
         if checkotp == True:
+
             checkquantity2 = Item.objects.get(id=id).quantity
             quantity = UnconfirmOrders.objects.get(contact_number=contact_number).quantity
+
             if checkquantity2 >= int(quantity):
                 firstname = UnconfirmOrders.objects.get(contact_number=contact_number).firstname
                 lastname = UnconfirmOrders.objects.get(contact_number=contact_number).lastname
@@ -114,6 +123,7 @@ def otp_confirmation(request, id, name, contact_number):
                 OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=120)).delete()
                 messages.success(request, 'Order was made successfully!')
                 return render(request,'orderconfirm.html', {'items': items});
+
             elif checkquantity2 < int(quantity) and checkquantity2 > 1:
                 UnconfirmOrders.objects.filter(contact_number=contact_number).delete()
                 messages.error(request, 'ORDER FAILED! You are trying to order a quantity above the current stocks')
@@ -126,11 +136,13 @@ def otp_confirmation(request, id, name, contact_number):
 
         else:
             checkexpire = OTPs.objects.filter(otp_expire__lte=datetime.now()).exists()
+
             if checkexpire == True:
                 OTPs.objects.filter(otp_expire__lte=datetime.now()-timedelta(seconds=120)).delete()
                 UnconfirmOrders.objects.filter(contact_number=contact_number).delete()
                 messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
                 return redirect(back)
+
             else:
                 UnconfirmOrders.objects.filter(contact_number=contact_number).delete()
                 messages.error(request, 'Uh-oh, You have entered an invalid OTP. Please Try to order again to generate new OTP')
@@ -139,16 +151,20 @@ def otp_confirmation(request, id, name, contact_number):
         return render(request,'otp-confirmation.html');
 
 def searchItem(request):
+
     if request.method == 'POST':
         search = request.POST['search']
+
         if Item.objects.filter(name__icontains=search).exists():
             shoe = Item.objects.filter(name__icontains=search)
             messages.success(request, 'Result for searched item: '+ search)
             return render(request,'home.html', {'shoe': shoe});
+
         else:
             shoe = Item.objects.all()
             messages.info(request, 'Sorry, no result for footware item: '+ search)
             return redirect('/')
+
     else:
         shoe = Item.objects.all()
         return redirect('/')
